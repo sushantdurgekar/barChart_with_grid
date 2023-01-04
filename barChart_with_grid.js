@@ -992,16 +992,11 @@ define([
         .append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -h / 2)
-        .attr("y", () => {
-          if (layout.myproperties.positionY === "left") {
-            return padding / 2;
-          }
-          if (layout.myproperties.positionY === "right") {
-            // console.log(layout.myproperties.positionY);
-            return padding * 1.7;
-          }
-        })
-        .attr("dy", -padding)
+        .attr(
+          "y",
+          $element[0].children[0].children[0].children[0].scrollWidth / 2
+        )
+        // .attr("dy", -padding)
         .attr("text-anchor", "middle")
         .attr("font-size", `${layout.myproperties.yAxisLabelSize}px`)
         .attr("fill", "black")
@@ -1025,86 +1020,86 @@ define([
             ? "none"
             : "none"
         );
-      console.log("rrrrrr");
 
       //Grid
-      if (layout.gridSwitch === true) {
-        let xGrid = g
-          .append("g")
-          .attr("transform", () => {
-            if (layout.myproperties.positionX == "top") {
-              return "translate(0," + padding + ")";
-            }
-            if (layout.myproperties.positionX == "bottom") {
-              return "translate(0," + (h - padding) + ")";
-            }
-          })
-          .attr("opacity", `${layout.myproperties.gridOpacity}`)
-          .style("stroke-dasharray", () => {
-            if (layout.myproperties.gridLineFormate === "dashed") return "5 5";
-            else if (layout.myproperties.gridLineFormate === "dotted")
-              return "2 3.5";
-            else return "0 0";
-          })
-          .call(
-            xAxis().tickSize(-(h - padding * 2))
-            // .ticks(
-            //   // layout.myproperties.gridScaling == "wide"
-            //   //   ? 3
-            //   //   : layout.myproperties.gridScaling == "medium"
-            //   //   ? 8
-            //   //   : layout.myproperties.gridScaling == "narrow"
-            //   //   ? 18
-            //   //   : 8
-            // )
-          )
-          .selectAll("text")
-          .style("opacity", "0");
-        xGrid.select("path").style("stroke", "white");
+      // if (layout.gridSwitch === true) {
+      //   let xGrid = g
+      //     .append("g")
+      //     .attr("transform", () => {
+      //       if (layout.myproperties.positionX == "top") {
+      //         return "translate(0," + padding + ")";
+      //       }
+      //       if (layout.myproperties.positionX == "bottom") {
+      //         return "translate(0," + (h - padding) + ")";
+      //       }
+      //     })
+      //     .attr("opacity", `${layout.myproperties.gridOpacity}`)
+      //     .style("stroke-dasharray", () => {
+      //       if (layout.myproperties.gridLineFormate === "dashed") return "5 5";
+      //       else if (layout.myproperties.gridLineFormate === "dotted")
+      //         return "2 3.5";
+      //       else return "0 0";
+      //     })
+      //     .call(
+      //       xAxis().tickSize(-(h - padding * 2))
+      //       // .ticks(
+      //       //   // layout.myproperties.gridScaling == "wide"
+      //       //   //   ? 3
+      //       //   //   : layout.myproperties.gridScaling == "medium"
+      //       //   //   ? 8
+      //       //   //   : layout.myproperties.gridScaling == "narrow"
+      //       //   //   ? 18
+      //       //   //   : 8
+      //       // )
+      //     )
+      //     .selectAll("text")
+      //     .style("opacity", "0");
+      //   xGrid.select("path").style("stroke", "white");
 
-        let yGrid = g
-          .append("g")
-          // .attr("transform", "translate(" + padding + ",0)")
-          .attr(
-            "transform",
-            () => {
-              if (layout.myproperties.positionY === "left") {
-                return "translate(" + padding + ",0)";
-              }
-              if (layout.myproperties.positionY === "right") {
-                // console.log(layout.myproperties.positionY);
-                return "translate(" + (w - padding) + ",0)";
-              }
-            }
-            // "translate(" +
-            //   (w * layout.myproperties.positionY +
-            //     padding * layout.myproperties.positionY) +
-            //   ",0)"
-          )
-          .attr("opacity", `${layout.myproperties.gridOpacity}`)
-          .style("stroke-dasharray", () => {
-            if (layout.myproperties.gridLineFormate === "dashed") return "5 5";
-            else if (layout.myproperties.gridLineFormate === "dotted")
-              return "2 3.5";
-            else return "0 0";
-          })
-          .call(
-            yAxis()
-              .tickSize(-(w - padding * 2))
-              .ticks(
-                layout.myproperties.gridScaling == "wide"
-                  ? 3
-                  : layout.myproperties.gridScaling == "medium"
-                  ? 8
-                  : layout.myproperties.gridScaling == "narrow"
-                  ? 18
-                  : 8
-              )
-          )
-          .selectAll("text")
-          .style("opacity", "0");
-        yGrid.select("path").style("stroke", "white");
-      }
+      //   let yGrid = g
+      //     .append("g")
+      //     // .attr("transform", "translate(" + padding + ",0)")
+      //     .attr(
+      //       "transform",
+      //       () => {
+      //         if (layout.myproperties.positionY === "left") {
+      //           return "translate(" + padding + ",0)";
+      //         }
+      //         if (layout.myproperties.positionY === "right") {
+      //           // console.log(layout.myproperties.positionY);
+      //           return "translate(" + (w - padding) + ",0)";
+      //         }
+      //       }
+      //       // "translate(" +
+      //       //   (w * layout.myproperties.positionY +
+      //       //     padding * layout.myproperties.positionY) +
+      //       //   ",0)"
+      //     )
+      //     .attr("opacity", `${layout.myproperties.gridOpacity}`)
+      //     .style("stroke-dasharray", () => {
+      //       if (layout.myproperties.gridLineFormate === "dashed") return "5 5";
+      //       else if (layout.myproperties.gridLineFormate === "dotted")
+      //         return "2 3.5";
+      //       else return "0 0";
+      //     })
+      //     .call(
+      //       yAxis()
+      //         .tickSize(-(w - padding * 2))
+      //         .ticks(
+      //           layout.myproperties.gridScaling == "wide"
+      //             ? 3
+      //             : layout.myproperties.gridScaling == "medium"
+      //             ? 8
+      //             : layout.myproperties.gridScaling == "narrow"
+      //             ? 18
+      //             : 8
+      //         )
+      //     )
+      //     .selectAll("text")
+      //     .style("opacity", "0");
+      //   yGrid.select("path").style("stroke", "white");
+      // }
+      console.log("rrrrrr");
 
       //Legend
       // if (layout.legend.legendSwitch) {
@@ -1114,16 +1109,20 @@ define([
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("class", "legendCon");
-      var legendGroup = legendContainer.append("g").attr("transform", () => {
-        if (layout.legend.legendPos == "right")
-          return "translate(" + (w - padding + 5) + "," + padding + ")";
-        else if (layout.legend.legendPos == "left")
-          return "translate(" + 5 + "," + padding + ")";
-        else if (layout.legend.legendPos == "top")
-          return "translate(" + w / 3 + "," + padding / 4 + ")";
-        else if (layout.legend.legendPos == "bottom")
-          return "translate(" + w / 3 + "," + (h - padding / 4) + ")";
-      });
+      var legendGroup = legendContainer.append("g").attr(
+        "transform",
+        "translate(0,0)"
+        //   () => {
+        //   if (layout.legend.legendPos == "right")
+        //     return "translate(" + (w - padding + 5) + "," + padding + ")";
+        //   else if (layout.legend.legendPos == "left")
+        //     return "translate(" + 5 + "," + padding + ")";
+        //   else if (layout.legend.legendPos == "top")
+        //     return "translate(" + w / 3 + "," + padding / 4 + ")";
+        //   else if (layout.legend.legendPos == "bottom")
+        //     return "translate(" + w / 3 + "," + (h - padding / 4) + ")";
+        // }
+      );
       //  + layout.myprops.position +
       let letterLen = 0;
 
