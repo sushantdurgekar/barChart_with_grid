@@ -1,0 +1,26 @@
+/* CSS */
+/* CSS */
+.bar {
+  /* width: 25px;
+  height: 100px;
+  margin: 2px; */
+  display: inline-block;
+  background-color: blue;
+}
+/* svg {
+  background-color: pink;
+} */
+.indBar:hover {
+  /* fill: rgb(0, 195, 255); */
+}
+.chartGrid {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 0.6fr 0.6fr 7fr 1.8fr;
+
+  grid-template-areas:
+    "yLabel1 yAxis1 mainChart legend"
+    ".... .... xAxis1 ...."
+    ".... .... xLabel1 ....";
+  grid-template-rows: 8.8fr 0.6fr 0.6fr;
+}
