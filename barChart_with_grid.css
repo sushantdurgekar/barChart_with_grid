@@ -17,10 +17,33 @@
   height: 100%;
   display: grid;
   grid-template-columns: 0.6fr 0.6fr 7fr 1.8fr;
-
   grid-template-areas:
     "yLabel1 yAxis1 mainChart legend"
     ".... .... xAxis1 ...."
     ".... .... xLabel1 ....";
-  grid-template-rows: 8.8fr 0.6fr 0.6fr;
+  grid-template-rows: 8.4fr 1fr 0.6fr;
+}
+.chartGrid.auto {
+  grid-template-columns: 0.6fr 0.6fr 7fr 1.8fr;
+  grid-template-areas:
+    "yLabel1 yAxis1 mainChart legend"
+    ".... .... xAxis1 ...."
+    ".... .... xLabel1 ....";
+  grid-template-rows: 8.4fr 1fr 0.6fr;
+}
+.chartGrid.xTop {
+  grid-template-columns: 0.6fr 0.6fr 7fr 1.8fr;
+  grid-template-areas:
+    ".... .... xLabel1 ...."
+    ".... .... xAxis1 ...."
+    "yLabel1 yAxis1 mainChart legend";
+  grid-template-rows: 0.6fr 1fr 8.4fr;
+}
+.chartGrid.yRight {
+  grid-template-columns: 7fr 0.6fr 0.6fr 1.8fr;
+  grid-template-areas:
+    "mainChart yLabel1 yAxis1 legend"
+    ".... .... xAxis1 ...."
+    ".... .... xLabel1 ....";
+  grid-template-rows: 8.4fr 1fr 0.6fr;
 }
