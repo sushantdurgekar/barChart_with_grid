@@ -10,20 +10,14 @@
 /* svg {
   background-color: pink;
 } */
-.indBar:hover {
-  /* fill: rgb(0, 195, 255); */
-}
+/* .indBar:hover {
+  fill: rgb(0, 195, 255);
+} */
 .chartGrid {
   height: 100%;
   display: grid;
-  grid-template-columns: 0.6fr 0.6fr 7fr 1.8fr;
-  grid-template-areas:
-    "yLabel1 yAxis1 mainChart legend"
-    ".... .... xAxis1 ...."
-    ".... .... xLabel1 ....";
-  grid-template-rows: 8.4fr 1fr 0.6fr;
 }
-.chartGrid.auto {
+/* .chartGrid.auto {
   grid-template-columns: 0.6fr 0.6fr 7fr 1.8fr;
   grid-template-areas:
     "yLabel1 yAxis1 mainChart legend"
@@ -46,4 +40,4 @@
     ".... .... xAxis1 ...."
     ".... .... xLabel1 ....";
   grid-template-rows: 8.4fr 1fr 0.6fr;
-}
+} */

@@ -298,23 +298,6 @@ define(["qlik"], function (qlik) {
                 ],
                 defaultValue: "single",
               },
-              // barColorSingleM: {
-              //   label: "Color",
-              //   component: "color-picker",
-              //   ref: "barColor.colors.myColor",
-              //   type: "object",
-              //   defaultValue: {
-              //     color: "006580",
-              //     index: "-1",
-              //   },
-              //   // show: console.log(),
-              //   show: function (layout) {
-              //     console.log(layout);
-              //     if (layout.barColor.colors === ("single" || "measure"))
-              //       return true;
-              //     return false;
-              //   },
-              // },
               MyColorPicker: {
                 label: "Select Color",
                 component: "color-picker",

@@ -2,7 +2,7 @@
 	"name": "barChart_with_grid",
 	"description": "Basic empty visualization template",
 	"type": "visualization",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"icon": "extension",
 	"author": "",
 	"homepage": "",
