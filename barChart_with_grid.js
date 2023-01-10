@@ -1,5 +1,5 @@
 define([
-  "https://code.jquery.com/jquery-3.6.3.js",
+  "jquery",
   //mashup and extension interface
   "qlik",
   "https://d3js.org/d3.v7.min.js",
@@ -49,6 +49,7 @@ define([
       exportData: false,
     },
     paint: function ($element, layout) {
+      let self = this;
       // console.log($element, layout);
       $element.html(
         `<div id="${layout.qInfo.qId}" style="height:100%">
@@ -260,8 +261,11 @@ define([
       //   ])
       // );
       let dataSet1 = layout.qHyperCube.qDataPages[0].qMatrix.map((d) => [
-        d[1].qNum,
-        d[0].qText,
+        {
+          dimension1: d[0].qText,
+          elementNo1: d[0].qElemNumber,
+        },
+        { measure1: d[1].qNum },
       ]);
 
       // console.log(dataSet1);
@@ -307,11 +311,11 @@ define([
 
       const xScale = d3
         .scaleBand()
-        .domain(dataSet1.map((d) => d[1]))
+        .domain(dataSet1.map((d) => d[0].dimension1))
         .range([0, w]);
       const yScale = d3
         .scaleLinear()
-        .domain([0, d3.max(dataSet1, (d) => d[0]) * 1.5])
+        .domain([0, d3.max(dataSet1, (d) => d[1].measure1) * 1.5])
         .range([h, 0]);
 
       //Tooltip
@@ -332,6 +336,7 @@ define([
         .style("border-width", "1px")
         .style("border-radius", "5px")
         .style("padding", "10px");
+
       // console.log("zgfz");
 
       var mouseover = function (e, d) {
@@ -339,11 +344,11 @@ define([
         // console.log(e, d);
         if (layout.tooltipSwitch) {
           tooltip.html(
-            ` ${layout.qHyperCube.qDimensionInfo[0].qFallbackTitle} : ${d[1]} <br>  ${layout.qHyperCube.qMeasureInfo[0].qFallbackTitle} : ${d[0]}`
+            ` ${layout.qHyperCube.qDimensionInfo[0].qFallbackTitle} : ${d[0].dimension1} <br>  ${layout.qHyperCube.qMeasureInfo[0].qFallbackTitle} : ${d[1].measure1}`
           );
         } else {
           tooltip.html(
-            ` ${layout.qHyperCube.qDimensionInfo[0].qFallbackTitle} : ${d[1]} <br>  ${layout.qHyperCube.qMeasureInfo[0].qFallbackTitle} : ${d[0]} <br> <div id="chartTooltip" style="height:50px;"></div> <br> <br> <div id="chartTooltip1" style="height:100px;"></div> <br>`
+            ` ${layout.qHyperCube.qDimensionInfo[0].qFallbackTitle} : ${d[0].dimension1} <br>  ${layout.qHyperCube.qMeasureInfo[0].qFallbackTitle} : ${d[1].measure1} <br> <div id="chartTooltip" style="height:50px;"></div> <br> <br> <div id="chartTooltip1" style="height:100px;"></div> <br>`
             // <img src="${layout.myImage.src}" alt="image" width="90" height="60">`
           );
           // Chart Visualisation
@@ -413,14 +418,22 @@ define([
       var mouseleave = (d) => tooltip.style("opacity", 0);
       function onClick(e, d) {
         // selectVal.push(d[1]);
-        console.log(
-          d[1],
-          app,
-          layout.qHyperCube.qDimensionInfo[0].qFallbackTitle
-        );
-        app
-          .field(layout.qHyperCube.qDimensionInfo[0].qFallbackTitle)
-          .selectValues([d[1]], true, true);
+        console.log(d[0], d[0].dimension1, d[0].elementNo1, this);
+        // app
+        //   .field(layout.qHyperCube.qDimensionInfo[0].qGroupFieldDefs[0])
+        //   .selectValues([d[1]], true, true);
+        // if (this.hasAttribute("data-value")) {
+        if ($(this).hasClass("selected")) {
+          $(this).removeClass("selected");
+        } else {
+          $(this).addClass("selected");
+        }
+        var value = parseInt(this.getAttribute("data-value"), 10);
+        // if ($(this).hasClass("selected")) {
+        //   $(this).appendClass("")
+        // }
+        self.selectValues(0, [value], true);
+        // }
         // app
         //   .field(layout.qHyperCube.qDimensionInfo[0].qFallbackTitle)
         //   .selectValues([{ qText: `${d[1]}` }], true, true);
@@ -432,24 +445,25 @@ define([
         //     true
         //   );
       }
+
       console.log(xScale.bandwidth());
       svg
         .selectAll("rect")
         .data(dataSet1)
         .enter()
         .append("rect")
-        // .attr("x", (d, i) => xScale(d[1]) + xScale.bandwidth() / 10)
         .attr(
           "x",
           (d, i) =>
-            xScale(d[1]) +
-            xScale.bandwidth() / layout.qHyperCube.qDataPages[0].qMatrix.length
+            xScale(d[0].dimension1) +
+            xScale.bandwidth() /
+              layout.qHyperCube.qDimensionInfo[0].qCardinalities.qCardinal
         )
-        .attr("y", (d, i) => yScale(d[0]))
+        .attr("y", (d, i) => yScale(d[1].measure1))
         .attr("width", xScale.bandwidth() / 1.1)
-        .attr("height", (d, i) => h - yScale(d[0]))
+        .attr("height", (d, i) => h - yScale(d[1].measure1))
         .attr("fill", (d, i) => {
-          if (d[1] === "-") {
+          if (d[0].dimension1 === "-") {
             return "#dcdcdc";
           } else {
             if (layout.barColor.colors.by == "single") {
@@ -472,20 +486,24 @@ define([
               return `rgb(${parseInt(mColor.substr(1, 2), 16)} ${parseInt(
                 mColor.substr(3, 2),
                 16
-              )} ${parseInt(mColor.substr(5, 2), 16)} / ${d[0] + 40}%)`;
+              )} ${parseInt(mColor.substr(5, 2), 16)} / ${
+                d[1].measure1 + 40
+              }%)`;
               // return layout.myColor.color;
               // return color;
             }
           }
         })
         .attr("opacity", `${layout.myproperties.barOpacity}`)
+        .attr("id", (d, i) => d[0].dimension1 + i)
         .attr("class", "indBar")
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
+        .attr("data-value", (d) => d[0].elementNo1)
+        // .on("mouseover", mouseover)
+        // .on("mousemove", mousemove)
+        // .on("mouseleave", mouseleave)
         .on("click", onClick);
       // .append("title")
-      // .text((d) => d[1]);
+      // .text((d) => d[0].dimension1);
 
       // console.log(svg);
       // mainChart.style("overflow-x", "scroll");
@@ -496,9 +514,9 @@ define([
           .enter()
           // Add your code below this line
           .append("text")
-          .attr("x", (d, i) => xScale(d[1]) + xScale.bandwidth() / 2)
-          .attr("y", (d, i) => yScale(d[0]) - 3)
-          .text((d) => d[0])
+          .attr("x", (d, i) => xScale(d[0].dimension1) + xScale.bandwidth() / 2)
+          .attr("y", (d, i) => yScale(d[1].measure1) - 3)
+          .text((d) => d[1].measure1)
           //.attr("transform","rotate(-45)")
           .style("font-size", "15px")
           .style("text-anchor", "middle")
@@ -677,7 +695,8 @@ define([
         .attr(
           "y",
           `${
-            xLabelChart.select("text").node().getBoundingClientRect().height / 2
+            xLabelChart.select("text").node().getBoundingClientRect().height /
+            1.2
           }`
         );
       // g.append("g")
@@ -710,7 +729,6 @@ define([
 
         .call(yAxis().tickFormat((d) => `${d3.format(".2s")(d)}`));
       yAxisScale.select("path").style("stroke", layout.yAxisColor.color);
-      // console.log(d3.max(dataset1, (d) => d[0]));
       d3.select(".yAxisChart").attr(
         "width",
         d3.select(".yG_Axis").node().getBoundingClientRect().width
@@ -915,10 +933,14 @@ define([
               layout.legend.legendPos == "bottom"
             )
               letterLen = 5 * letterLen + letterPreLen;
-            console.log(d[1].length, d[1].length * 6, letterLen);
+            console.log(
+              d[0].dimension1.length,
+              d[0].dimension1.length * 6,
+              letterLen
+            );
             let transformLS = "translate(" + letterLen + ",0)";
             letterPreLen = letterLen + 30;
-            letterLen = d[1].length;
+            letterLen = d[0].dimension1.length;
             return transformLS;
           })
           .attr("class", "legend");
@@ -938,7 +960,7 @@ define([
           })
           .text(function (d, i) {
             // console.log(d);
-            return d[1];
+            return d[0].dimension1;
           })
           .style("font-size", 12)
           .attr("y", 10)

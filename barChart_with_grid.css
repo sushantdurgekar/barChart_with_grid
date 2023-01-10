@@ -17,6 +17,10 @@
   height: 100%;
   display: grid;
 }
+.selected {
+  stroke: black;
+  stroke-width: 3px;
+}
 /* .chartGrid.auto {
   grid-template-columns: 0.6fr 0.6fr 7fr 1.8fr;
   grid-template-areas:
